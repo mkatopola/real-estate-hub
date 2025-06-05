@@ -1,0 +1,1 @@
+// __tests__/properties.test.js
