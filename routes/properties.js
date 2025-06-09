@@ -7,6 +7,7 @@ const { validateProperty } = require("../middlewares/validate");
 
 // CREATE a new property with duplicate check
 router.post("/", validateProperty, async (req, res, next) => {
+  // #swagger.tags = ['Properties']
   try {
     const { title } = req.body;
 
@@ -34,6 +35,7 @@ router.post("/", validateProperty, async (req, res, next) => {
 
 // READ all properties
 router.get("/", async (req, res, next) => {
+  // #swagger.tags = ['Properties']
   try {
     const properties = await Property.find();
     res.status(200).json(properties);
@@ -45,6 +47,7 @@ router.get("/", async (req, res, next) => {
 
 // READ a single property by ID
 router.get("/:id", async (req, res, next) => {
+  // #swagger.tags = ['Properties']
   try {
     const property = await Property.findById(req.params.id);
     if (!property)
@@ -58,6 +61,7 @@ router.get("/:id", async (req, res, next) => {
 
 // UPDATE a property by ID
 router.put("/:id", validateProperty, async (req, res, next) => {
+  // #swagger.tags = ['Properties']
   try {
     // Check if property with new title already exists (if title is being updated)
     if (req.body.title) {
@@ -100,25 +104,5 @@ router.put("/:id", validateProperty, async (req, res, next) => {
 });
 
 // DELETE a property by ID
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const deletedProperty = await Property.findByIdAndDelete(req.params.id);
-    
-    if (!deletedProperty) {
-      return res.status(404).json({ 
-        success: false,
-        message: "Property not found" 
-      });
-    }
-    
-    res.status(200).json({
-      success: true,
-      message: "Property deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-    next();
-  }
-});
 
 module.exports = router;

@@ -4,9 +4,12 @@ const router = express.Router();
 const passport = require("passport");
 
 // Authentication routes
-router.post("/login", passport.authenticate("github"));
+router.post(
+  // #swagger.tags = ['Authentication']
+  "/login", passport.authenticate("github"));
 
 router.get(
+  // #swagger.tags = ['Authentication']
   "/github/callback",
   passport.authenticate("github", {
     failureRedirect: "/login",
@@ -20,6 +23,7 @@ router.get(
 
 // Logout route
 router.get("/logout", async (req, res) => {
+  // #swagger.tags = ['Authentication']
   try {
     const session = req.sessionID;
 

@@ -7,6 +7,7 @@ const { validateAgent } = require("../middlewares/validate");
 
 // CREATE a new agent with duplicate check
 router.post("/", validateAgent, async (req, res, next) => {
+  // #swagger.tags = ['Agents']
   try {
     const { email } = req.body;
 
@@ -34,6 +35,7 @@ router.post("/", validateAgent, async (req, res, next) => {
 
 // READ all agents
 router.get("/", async (req, res, next) => {
+  // #swagger.tags = ['Agents']
   try {
     const agents = await Agent.find();
     res.status(200).json(agents);
@@ -45,6 +47,7 @@ router.get("/", async (req, res, next) => {
 
 // READ a single agent by ID
 router.get("/:id", async (req, res, next) => {
+  // #swagger.tags = ['Agents']
   try {
     const agent = await Agent.findById(req.params.id);
     if (!agent) return res.status(404).json({ message: "Agent not found" });
@@ -57,6 +60,7 @@ router.get("/:id", async (req, res, next) => {
 
 // UPDATE an agent by ID
 router.put("/:id", validateAgent, async (req, res, next) => {
+  // #swagger.tags = ['Agents']
   try {
     // Check if agent with new email already exists (if email is being updated)
     if (req.body.email) {
@@ -99,25 +103,6 @@ router.put("/:id", validateAgent, async (req, res, next) => {
 });
 
 // DELETE an agent by ID
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const deletedAgent = await Agent.findByIdAndDelete(req.params.id);
-    
-    if (!deletedAgent) {
-      return res.status(404).json({ 
-        success: false,
-        message: "Agent not found" 
-      });
-    }
-    
-    res.status(200).json({
-      success: true,
-      message: "Agent deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-    next();
-  }
-});
+
 
 module.exports = router;
