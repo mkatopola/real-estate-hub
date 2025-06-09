@@ -56,4 +56,69 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// UPDATE a property by ID
+router.put("/:id", validateProperty, async (req, res, next) => {
+  try {
+    // Check if property with new title already exists (if title is being updated)
+    if (req.body.title) {
+      const existingProperty = await Property.findOne({ 
+        title: req.body.title,
+        _id: { $ne: req.params.id } 
+      });
+      
+      if (existingProperty) {
+        return res.status(400).json({
+          success: false,
+          message: "Property with this title already exists",
+          conflictField: "title"
+        });
+      }
+    }
+
+    const updatedProperty = await Property.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProperty) {
+      return res.status(404).json({ 
+        success: false,
+        message: "Property not found" 
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Property updated successfully",
+      data: updatedProperty
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    next();
+  }
+});
+
+// DELETE a property by ID
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const deletedProperty = await Property.findByIdAndDelete(req.params.id);
+    
+    if (!deletedProperty) {
+      return res.status(404).json({ 
+        success: false,
+        message: "Property not found" 
+      });
+    }
+    
+    res.status(200).json({
+      success: true,
+      message: "Property deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    next();
+  }
+});
+
 module.exports = router;

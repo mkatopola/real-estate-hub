@@ -55,4 +55,69 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// UPDATE an agent by ID
+router.put("/:id", validateAgent, async (req, res, next) => {
+  try {
+    // Check if agent with new email already exists (if email is being updated)
+    if (req.body.email) {
+      const existingAgent = await Agent.findOne({ 
+        email: req.body.email,
+        _id: { $ne: req.params.id } 
+      });
+      
+      if (existingAgent) {
+        return res.status(400).json({
+          success: false,
+          message: "Agent with this email already exists",
+          conflictField: "email"
+        });
+      }
+    }
+
+    const updatedAgent = await Agent.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedAgent) {
+      return res.status(404).json({ 
+        success: false,
+        message: "Agent not found" 
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Agent updated successfully",
+      data: updatedAgent
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    next();
+  }
+});
+
+// DELETE an agent by ID
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const deletedAgent = await Agent.findByIdAndDelete(req.params.id);
+    
+    if (!deletedAgent) {
+      return res.status(404).json({ 
+        success: false,
+        message: "Agent not found" 
+      });
+    }
+    
+    res.status(200).json({
+      success: true,
+      message: "Agent deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    next();
+  }
+});
+
 module.exports = router;
