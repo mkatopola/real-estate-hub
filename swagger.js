@@ -6,7 +6,7 @@ const doc = {
     description: 'API documentation for Real Estate Hub application',
     version: '1.0.0',
   },
-  host: process.env.BASE_URL || 'localhost:3000',
+  host: process.env.BASE_URL || 'real-estate-hub-cmhc.onrender.com',
   schemes: ['http', 'https'],
   tags: [
     { name: 'Properties', description: 'Property management endpoints' },
