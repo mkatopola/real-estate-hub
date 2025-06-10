@@ -7,7 +7,7 @@ const doc = {
     version: '1.0.0',
   },
   host: process.env.BASE_URL || 'real-estate-hub-cmhc.onrender.com',
-  schemes: ['https, 'http'],
+  schemes: ['https', 'http'],
   tags: [
     { name: 'Properties', description: 'Property management endpoints' },
     { name: 'Agents', description: 'Agent management endpoints' },
