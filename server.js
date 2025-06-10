@@ -35,3 +35,5 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   console.log(`API Documentation available at http://localhost:${PORT}/api-docs`);
 });
+
+module.exports = app;

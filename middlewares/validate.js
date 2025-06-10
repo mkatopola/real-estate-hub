@@ -9,8 +9,9 @@ exports.validateAgent = [
     .withMessage("Name must be a string"),
   body("email").isEmail().withMessage("Email must be a valid email address"),
   body("phone")
-    .optional()
-    .isMobilePhone()
+    .notEmpty()
+    .withMessage("Phone is required")
+    .isMobilePhone('any')
     .withMessage("Phone must be a valid mobile phone number"),
   body("licenseNumber")
     .notEmpty()
@@ -34,8 +35,9 @@ exports.validateClient = [
     .withMessage("Name must be a string"),
   body("email").isEmail().withMessage("Email must be a valid email address"),
   body("phone")
-    .optional()
-    .isMobilePhone()
+    .notEmpty()
+    .withMessage("Phone is required")
+    .isMobilePhone('any')
     .withMessage("Phone must be a valid mobile phone number"),
   (req, res, next) => {
     const errors = validationResult(req);

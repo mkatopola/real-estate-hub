@@ -104,5 +104,24 @@ router.put("/:id", validateProperty, async (req, res, next) => {
 });
 
 // DELETE a property by ID
+router.delete("/:id", async (req, res, next) => {
+  // #swagger.tags = ['Properties']
+  try {
+    const deletedProperty = await Property.findByIdAndDelete(req.params.id);
+    if (!deletedProperty) {
+      return res.status(404).json({
+        success: false,
+        message: "Property not found"
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Property deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    next();
+  }
+});
 
 module.exports = router;
