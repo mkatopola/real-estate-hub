@@ -12,7 +12,8 @@ const doc = {
     { name: 'Properties', description: 'Property management endpoints' },
     { name: 'Agents', description: 'Agent management endpoints' },
     { name: 'Clients', description: 'Client management endpoints' },
-    { name: 'Users', description: 'User authentication endpoints' }
+    { name: 'Users', description: 'User authentication endpoints' },
+    { name: 'Authentication', description: 'Authentication endpoints' }
   ],
   definitions: {
     Property: {
@@ -46,6 +47,6 @@ const doc = {
 };
 
 const outputFile = './swagger-output.json';
-const endpointsFiles = ['./server.js'];
+const endpointsFiles = ['./server.js', './routes/auth.js'];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);

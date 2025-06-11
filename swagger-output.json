@@ -5,7 +5,7 @@
     "description": "API documentation for Real Estate Hub application",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "real-estate-hub-cmhc.onrender.com",
   "basePath": "/",
   "tags": [
     {
@@ -23,11 +23,15 @@
     {
       "name": "Users",
       "description": "User authentication endpoints"
+    },
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints"
     }
   ],
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
     "/": {
@@ -416,6 +420,48 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/github/callback": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"
