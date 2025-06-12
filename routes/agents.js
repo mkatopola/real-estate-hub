@@ -103,6 +103,24 @@ router.put("/:id", validateAgent, async (req, res, next) => {
 });
 
 // DELETE an agent by ID
-
+router.delete("/:id", async (req, res, next) => {
+  // #swagger.tags = ['Agents']
+  try {
+    const deletedAgent = await Agent.findByIdAndDelete(req.params.id);
+    if (!deletedAgent) {
+      return res.status(404).json({
+        success: false,
+        message: "Agent not found"
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Agent deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    next();
+  }
+});
 
 module.exports = router;
