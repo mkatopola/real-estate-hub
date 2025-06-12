@@ -8,6 +8,13 @@ const { validateProperty } = require("../middlewares/validate");
 // CREATE a new property with duplicate check
 router.post("/", validateProperty, async (req, res, next) => {
   // #swagger.tags = ['Properties']
+  // #swagger.description = 'Create a new property'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    description: 'Property information',
+    required: true,
+    schema: { $ref: '#/definitions/Property' }
+  } */
   try {
     const { title } = req.body;
 
@@ -62,6 +69,13 @@ router.get("/:id", async (req, res, next) => {
 // UPDATE a property by ID
 router.put("/:id", validateProperty, async (req, res, next) => {
   // #swagger.tags = ['Properties']
+  // #swagger.description = 'Update a property by ID'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    description: 'Property information to update',
+    required: true,
+    schema: { $ref: '#/definitions/Property' }
+  } */
   try {
     // Check if property with new title already exists (if title is being updated)
     if (req.body.title) {

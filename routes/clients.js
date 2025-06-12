@@ -8,6 +8,13 @@ const { validateClient } = require('../middlewares/validate');
 // CREATE a new client with duplicate check
 router.post('/', validateClient, async (req, res, next) => {
   // #swagger.tags = ['Clients']
+  // #swagger.description = 'Create a new client'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    description: 'Client information',
+    required: true,
+    schema: { $ref: '#/definitions/Client' }
+  } */
   try {
     const { email } = req.body;
 
@@ -61,6 +68,13 @@ router.get('/:id', async (req, res, next) => {
 // UPDATE a client by ID
 router.put('/:id', validateClient, async (req, res, next) => {
   // #swagger.tags = ['Clients']
+  // #swagger.description = 'Update a client by ID'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    description: 'Client information to update',
+    required: true,
+    schema: { $ref: '#/definitions/Client' }
+  } */
   try {
     // Check if client with new email already exists (if email is being updated)
     if (req.body.email) {

@@ -30,16 +30,47 @@
     }
   ],
   "schemes": [
-    "https",
-    "http"
-  ],
+    "https"
+    ],
   "paths": {
-    "/": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/github/callback": {
       "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -49,18 +80,15 @@
         "tags": [
           "Agents"
         ],
-        "description": "",
+        "description": "Create a new agent",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "description": "Agent information",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Agent"
             }
           }
         ],
@@ -118,7 +146,7 @@
         "tags": [
           "Agents"
         ],
-        "description": "",
+        "description": "Update an agent by ID",
         "parameters": [
           {
             "name": "id",
@@ -129,13 +157,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Agent information to update",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Agent"
             }
           }
         ],
@@ -185,18 +210,15 @@
         "tags": [
           "Clients"
         ],
-        "description": "",
+        "description": "Create a new client",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "description": "Client information",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Client"
             }
           }
         ],
@@ -254,7 +276,7 @@
         "tags": [
           "Clients"
         ],
-        "description": "",
+        "description": "Update a client by ID",
         "parameters": [
           {
             "name": "id",
@@ -265,13 +287,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Client information to update",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Client"
             }
           }
         ],
@@ -321,18 +340,15 @@
         "tags": [
           "Properties"
         ],
-        "description": "",
+        "description": "Create a new property",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "description": "Property information",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Property"
             }
           }
         ],
@@ -390,7 +406,7 @@
         "tags": [
           "Properties"
         ],
-        "description": "",
+        "description": "Update a property by ID",
         "parameters": [
           {
             "name": "id",
@@ -401,13 +417,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Property information to update",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Property"
             }
           }
         ],
@@ -451,48 +464,6 @@
           }
         }
       }
-    },
-    "/login": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/github/callback": {
-      "get": {
-        "tags": [
-          "Authentication"
-        ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/logout": {
-      "get": {
-        "tags": [
-          "Authentication"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -501,11 +472,11 @@
       "properties": {
         "title": {
           "type": "string",
-          "example": "Sample Property"
+          "example": "Modern Downtown Apartment"
         },
         "description": {
           "type": "string",
-          "example": "Property description"
+          "example": "Luxury apartment with city views"
         },
         "type": {
           "type": "string",
@@ -513,15 +484,15 @@
         },
         "address": {
           "type": "string",
-          "example": "123 Main St"
+          "example": "123 Main St, City, State"
         },
         "price": {
           "type": "number",
-          "example": 1500
+          "example": 2500
         },
         "bedrooms": {
           "type": "number",
-          "example": 3
+          "example": 2
         },
         "bathrooms": {
           "type": "number",
@@ -530,6 +501,31 @@
         "status": {
           "type": "string",
           "example": "available"
+        },
+        "features": {
+          "type": "array",
+          "example": [
+            "parking",
+            "gym",
+            "pool"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "images": {
+          "type": "array",
+          "example": [
+            "image1.jpg",
+            "image2.jpg"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-06-09T07:00:21.543Z"
         }
       }
     },
@@ -538,19 +534,23 @@
       "properties": {
         "name": {
           "type": "string",
-          "example": "John Doe"
+          "example": "Aisha Brown"
         },
         "email": {
           "type": "string",
-          "example": "john@example.com"
+          "example": "abrown@engineering.ae"
         },
         "phone": {
           "type": "string",
-          "example": "123-456-7890"
+          "example": "555-876-5432"
         },
         "licenseNumber": {
           "type": "string",
-          "example": "ABC123"
+          "example": "ENG11223344556"
+        },
+        "__v": {
+          "type": "number",
+          "example": 0
         }
       }
     },
@@ -559,7 +559,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "example": "Jane Smith"
+          "example": "Jane Doe"
         },
         "email": {
           "type": "string",
@@ -567,7 +567,7 @@
         },
         "phone": {
           "type": "string",
-          "example": "123-456-7890"
+          "example": "555-987-6543"
         }
       }
     },

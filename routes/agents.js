@@ -8,6 +8,13 @@ const { validateAgent } = require("../middlewares/validate");
 // CREATE a new agent with duplicate check
 router.post("/", validateAgent, async (req, res, next) => {
   // #swagger.tags = ['Agents']
+  // #swagger.description = 'Create a new agent'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    description: 'Agent information',
+    required: true,
+    schema: { $ref: '#/definitions/Agent' }
+  } */
   try {
     const { email } = req.body;
 
@@ -61,6 +68,13 @@ router.get("/:id", async (req, res, next) => {
 // UPDATE an agent by ID
 router.put("/:id", validateAgent, async (req, res, next) => {
   // #swagger.tags = ['Agents']
+  // #swagger.description = 'Update an agent by ID'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    description: 'Agent information to update',
+    required: true,
+    schema: { $ref: '#/definitions/Agent' }
+  } */
   try {
     // Check if agent with new email already exists (if email is being updated)
     if (req.body.email) {

@@ -12,7 +12,7 @@ router.get(
   // #swagger.tags = ['Authentication']
   "/github/callback",
   passport.authenticate("github", {
-    failureRedirect: "/login",
+    failureRedirect: "/auth/login",
     successRedirect: "/api-docs"
   }),
   (req, res) => {

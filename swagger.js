@@ -17,25 +17,29 @@ const doc = {
   ],
   definitions: {
     Property: {
-      title: 'Sample Property',
-      description: 'Property description',
+      title: 'Modern Downtown Apartment',
+      description: 'Luxury apartment with city views',
       type: 'rent',
-      address: '123 Main St',
-      price: 1500,
-      bedrooms: 3,
+      address: '123 Main St, City, State',
+      price: 2500,
+      bedrooms: 2,
       bathrooms: 2,
-      status: 'available'
+      status: 'available',
+      features: ['parking', 'gym', 'pool'],
+      images: ['image1.jpg', 'image2.jpg'],
+      createdAt: '2025-06-09T07:00:21.543Z'
     },
     Agent: {
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '123-456-7890',
-      licenseNumber: 'ABC123'
+      name: 'Aisha Brown',
+      email: 'abrown@engineering.ae',
+      phone: '555-876-5432',
+      licenseNumber: 'ENG11223344556',
+      __v: 0
     },
     Client: {
-      name: 'Jane Smith',
+      name: 'Jane Doe',
       email: 'jane@example.com',
-      phone: '123-456-7890'
+      phone: '555-987-6543'
     },
     User: {
       githubId: '12345',
@@ -47,6 +51,11 @@ const doc = {
 };
 
 const outputFile = './swagger-output.json';
-const endpointsFiles = ['./server.js', './routes/auth.js'];
+const endpointsFiles = [
+  './routes/auth.js',
+  './routes/agents.js',
+  './routes/clients.js',
+  './routes/properties.js'
+];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);

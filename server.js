@@ -20,6 +20,7 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Routes
+app.use("/auth", require("./routes/auth"));
 app.use("/agents", require("./routes/agents"));
 app.use("/clients", require("./routes/clients"));
 app.use("/properties", require("./routes/properties"));
