@@ -1,11 +1,15 @@
 // server.js
 require("dotenv").config();
-const cors = require('cors');
-const connectDB = require("./config/db");
 const express = require("express");
+const session = require('express-session');
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
+const passport = require('./config/passport');
+const connectDB = require("./config/db");
+
 const PORT = process.env.PORT || 3000;
+
 
 // Initialize express app
 const app = express();
@@ -13,7 +17,9 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+
 app.use(express.json());
+
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "https://real-estate-hub-cmhc.onrender.com",
@@ -21,7 +27,25 @@ app.use(cors({
   credentials: true
 }));
 
+
 // Middleware for session management
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'Keyboard Cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    sameSite: 'lax',
+  }
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
