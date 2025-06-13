@@ -31,10 +31,20 @@
   ],
   "schemes": [
     "https"
-    ],
+  ],
   "paths": {
-    "/auth/login": {
-      "post": {
+    "/login": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/github/callback": {
+      "get": {
         "tags": [
           "Authentication"
         ],
@@ -46,20 +56,7 @@
         }
       }
     },
-    "/auth/github/callback": {
-      "get": {
-        "tags": [
-          "Authentication"
-        ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/auth/logout": {
+    "/logout": {
       "get": {
         "tags": [
           "Authentication"
@@ -75,267 +72,7 @@
         }
       }
     },
-    "/agents/": {
-      "post": {
-        "tags": [
-          "Agents"
-        ],
-        "description": "Create a new agent",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Agent information",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Agent"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Agents"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/agents/{id}": {
-      "get": {
-        "tags": [
-          "Agents"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Agents"
-        ],
-        "description": "Update an agent by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Agent information to update",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Agent"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Agents"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/clients/": {
-      "post": {
-        "tags": [
-          "Clients"
-        ],
-        "description": "Create a new client",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Client information",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Client"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Clients"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/clients/{id}": {
-      "get": {
-        "tags": [
-          "Clients"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Clients"
-        ],
-        "description": "Update a client by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Client information to update",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Client"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Clients"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/properties/": {
+    "/": {
       "post": {
         "tags": [
           "Properties"
@@ -376,7 +113,7 @@
         }
       }
     },
-    "/properties/{id}": {
+    "/{id}": {
       "get": {
         "tags": [
           "Properties"
