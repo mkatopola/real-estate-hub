@@ -16,7 +16,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
@@ -36,5 +35,10 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/mkatopola/real-estate-hub/issues"
+  },
+  "homepage": "https://github.com/mkatopola/real-estate-hub#readme",
+  "description": ""
 }
