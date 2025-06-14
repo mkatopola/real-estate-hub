@@ -1,22 +1,19 @@
 const GitHubStrategy = require('passport-github2').Strategy;
 const passport = require('passport');
-
-
-
-const users = new Map();
-
+const User = require('../models/user'); // Import the User model
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-
-passport.deserializeUser((id, done) => {
-    const user = users.get(id);
-    done(null, user);    
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (error) {
+        done(error, null);
+    }
 });
-
-
 
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
@@ -24,23 +21,27 @@ passport.use(new GitHubStrategy({
     callbackURL: process.env.GITHUB_CALLBACK_URL
   },
   async (accessToken, refreshToken, profile, done) => {
-    // Check if user already exists in the map
-    let user = users.get(profile.id);
-    if (!user) {
-        user = {
-            id: profile.id,
-            username: profile.username,
-            displayName: profile.displayName,
-            profileUrl: profile.profileUrl,
-            emails: profile.emails
-        };
-        users.set(profile.id, user);
+    try {
+        // Check if user already exists in the database
+        let user = await User.findOne({ githubId: profile.id });
+        
+        if (!user) {
+            // Create new user
+            user = new User({
+                githubId: profile.id,
+                username: profile.username,
+                email: profile.emails?.[0]?.value || `${profile.username}@github.com`,
+                profilePicture: profile.photos?.[0]?.value || ''
+            });
+
+            // Save the new user
+            await user.save();
+        }
+
+        return done(null, user);
+    } catch (error) {
+        return done(error, null);
     }
-
-    return done(null, user);
-}
-
-));
-
+}));
 
 module.exports = passport;
