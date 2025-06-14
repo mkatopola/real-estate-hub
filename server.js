@@ -62,6 +62,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/agents", require("./routes/agents"));
 app.use("/clients", require("./routes/clients"));
 app.use("/properties", require("./routes/properties"));
+app.use("/users", require("./routes/users"));
 
 // Health check route
 app.get("/", (req, res) => res.send("Welcome to the REAL ESTATE HUB API"));
