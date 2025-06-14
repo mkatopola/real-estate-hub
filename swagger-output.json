@@ -36,7 +36,10 @@
       "tokenUrl": "https://github.com/login/oauth/access_token",
       "scopes": {
         "read:user": "Read user profiles",
-        "write:user": "Modify own user profile"
+        "write:user": "Modify own user profile",
+        "write:property": "Modify properties",
+        "write:agent": "Modify agents",
+        "write:client": "Modify clients"
       }
     }
   },
@@ -69,10 +72,16 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request - Validation error"
+          },
+          "401": {
+            "description": "Unauthorized - Authentication required"
           },
           "409": {
             "description": "Conflict - Duplicate title"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
@@ -115,7 +124,7 @@
             "schema": { "$ref": "#/definitions/Property" }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found - Property not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -153,9 +162,21 @@
               }
             }
           },
-          "400": { "description": "Bad Request" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "400": { 
+            "description": "Bad Request - Validation error" 
+          },
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - Property not found" 
+          },
+          "409": { 
+            "description": "Conflict - Duplicate field value" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:property"] }
@@ -184,8 +205,15 @@
               }
             }
           },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - Property not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:property"] }
@@ -205,7 +233,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Authentication required"
           },
           "500": {
             "description": "Internal Server Error"
@@ -234,9 +262,15 @@
             "description": "OK",
             "schema": { "$ref": "#/definitions/User" }
           },
-          "401": { "description": "Unauthorized" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - User not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["read:user"] }
@@ -273,12 +307,24 @@
               }
             }
           },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "409": { "description": "Conflict" },
-          "500": { "description": "Internal Server Error" }
+          "400": { 
+            "description": "Bad Request - Validation error" 
+          },
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "403": { 
+            "description": "Forbidden - Cannot modify other users" 
+          },
+          "404": { 
+            "description": "Not Found - User not found" 
+          },
+          "409": { 
+            "description": "Conflict - Duplicate field value" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:user"] }
@@ -307,10 +353,18 @@
               }
             }
           },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "403": { 
+            "description": "Forbidden - Cannot delete other users" 
+          },
+          "404": { 
+            "description": "Not Found - User not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:user"] }
@@ -342,8 +396,18 @@
               }
             }
           },
-          "400": { "description": "Bad Request" },
-          "409": { "description": "Conflict" }
+          "400": { 
+            "description": "Bad Request - Validation error" 
+          },
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "409": { 
+            "description": "Conflict - Duplicate email" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:agent"] }
@@ -360,7 +424,9 @@
               "items": { "$ref": "#/definitions/Agent" }
             }
           },
-          "500": { "description": "Internal Server Error" }
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         }
       }
     },
@@ -382,8 +448,12 @@
             "description": "OK",
             "schema": { "$ref": "#/definitions/Agent" }
           },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "404": { 
+            "description": "Not Found - Agent not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         }
       },
       "put": {
@@ -417,9 +487,21 @@
               }
             }
           },
-          "400": { "description": "Bad Request" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "400": { 
+            "description": "Bad Request - Validation error" 
+          },
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - Agent not found" 
+          },
+          "409": { 
+            "description": "Conflict - Duplicate email" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:agent"] }
@@ -448,8 +530,15 @@
               }
             }
           },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - Agent not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:agent"] }
@@ -481,8 +570,18 @@
               }
             }
           },
-          "400": { "description": "Bad Request" },
-          "409": { "description": "Conflict" }
+          "400": { 
+            "description": "Bad Request - Validation error" 
+          },
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "409": { 
+            "description": "Conflict - Duplicate email" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:client"] }
@@ -499,7 +598,9 @@
               "items": { "$ref": "#/definitions/Client" }
             }
           },
-          "500": { "description": "Internal Server Error" }
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         }
       }
     },
@@ -521,8 +622,12 @@
             "description": "OK",
             "schema": { "$ref": "#/definitions/Client" }
           },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "404": { 
+            "description": "Not Found - Client not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         }
       },
       "put": {
@@ -556,9 +661,21 @@
               }
             }
           },
-          "400": { "description": "Bad Request" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "400": { 
+            "description": "Bad Request - Validation error" 
+          },
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - Client not found" 
+          },
+          "409": { 
+            "description": "Conflict - Duplicate email" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:client"] }
@@ -587,8 +704,15 @@
               }
             }
           },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "401": { 
+            "description": "Unauthorized - Authentication required" 
+          },
+          "404": { 
+            "description": "Not Found - Client not found" 
+          },
+          "500": { 
+            "description": "Internal Server Error" 
+          }
         },
         "security": [
           { "OAuth2": ["write:client"] }
