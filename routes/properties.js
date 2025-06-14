@@ -3,18 +3,20 @@ const express = require("express");
 const router = express.Router();
 const Property = require("../models/property");
 const { validateProperty } = require("../middlewares/validate");
-// const { ensureAuth } = require("../middlewares/auth");
 
 // CREATE a new property with duplicate check
-router.post("/", validateProperty, async (req, res, next) => {
+router.post("/", 
   // #swagger.tags = ['Properties']
   // #swagger.description = 'Create a new property'
+  // #swagger.security = [{ "OAuth2": [] }]
   /* #swagger.parameters['body'] = {
     in: 'body',
     description: 'Property information',
     required: true,
     schema: { $ref: '#/definitions/Property' }
   } */
+  validateProperty, 
+  async (req, res, next) => {
   try {
     const { title } = req.body;
 
@@ -41,8 +43,10 @@ router.post("/", validateProperty, async (req, res, next) => {
 });
 
 // READ all properties
-router.get("/", async (req, res, next) => {
+router.get("/", 
   // #swagger.tags = ['Properties']
+  // #swagger.description = 'Get all properties'
+  async (req, res, next) => {
   try {
     const properties = await Property.find();
     res.status(200).json(properties);
@@ -53,8 +57,11 @@ router.get("/", async (req, res, next) => {
 });
 
 // READ a single property by ID
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", 
   // #swagger.tags = ['Properties']
+  // #swagger.description = 'Get property by ID'
+  // #swagger.parameters['id'] = { description: 'Property ID' }
+  async (req, res, next) => {
   try {
     const property = await Property.findById(req.params.id);
     if (!property)
@@ -67,17 +74,20 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // UPDATE a property by ID
-router.put("/:id", validateProperty, async (req, res, next) => {
+router.put("/:id", 
   // #swagger.tags = ['Properties']
   // #swagger.description = 'Update a property by ID'
+  // #swagger.security = [{ "OAuth2": [] }]
   /* #swagger.parameters['body'] = {
     in: 'body',
     description: 'Property information to update',
     required: true,
     schema: { $ref: '#/definitions/Property' }
   } */
+  validateProperty, 
+  async (req, res, next) => {
   try {
-    // Check if property with new title already exists (if title is being updated)
+    // Check if property with new title already exists
     if (req.body.title) {
       const existingProperty = await Property.findOne({ 
         title: req.body.title,
@@ -118,8 +128,12 @@ router.put("/:id", validateProperty, async (req, res, next) => {
 });
 
 // DELETE a property by ID
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", 
   // #swagger.tags = ['Properties']
+  // #swagger.description = 'Delete property by ID'
+  // #swagger.security = [{ "OAuth2": [] }]
+  // #swagger.parameters['id'] = { description: 'Property ID' }
+  async (req, res, next) => {
   try {
     const deletedProperty = await Property.findByIdAndDelete(req.params.id);
     if (!deletedProperty) {
