@@ -137,14 +137,13 @@ router.delete(
         });
       }
 
-      // Logout after account deletion
-      req.logout(() => {
-        req.session.destroy(() => {
-          res.clearCookie("connect.sid");
-          res.status(200).json({
-            success: true,
-            message: "User account deleted successfully"
-          });
+      // Logout after account deletion (Passport v0.6+)
+      req.logout();
+      req.session.destroy(() => {
+        res.clearCookie("connect.sid");
+        res.status(200).json({
+          success: true,
+          message: "User account deleted successfully"
         });
       });
     } catch (error) {

@@ -63,15 +63,12 @@ const router = express.Router();
 const passport = require("passport");
 
 // Start GitHub login 
-<<<<<<< HEAD
 router.get("/login", passport.authenticate("github"));
-=======
 router.get("/login", 
   // #swagger.tags = ['Authentication']
   // #swagger.description = 'Initiate GitHub authentication'
   passport.authenticate("github")
 );
->>>>>>> db62196192e702fc71e0e750739885695de6ee6d
 
 // Callback route for GitHub to redirect to after authentication
 router.get(
@@ -110,10 +107,5 @@ router.get("/logout",
         message: "Logout failed"
       });
     }
-  });
-<<<<<<< HEAD
-
-=======
->>>>>>> db62196192e702fc71e0e750739885695de6ee6d
-   
+  });   
 module.exports = router;
