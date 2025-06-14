@@ -4,12 +4,17 @@ const router = express.Router();
 const passport = require("passport");
 
 // Start GitHub login 
-router.get("/login", passport.authenticate("github"));
+router.get("/login", 
+  // #swagger.tags = ['Authentication']
+  // #swagger.description = 'Initiate GitHub authentication'
+  passport.authenticate("github")
+);
 
 // Callback route for GitHub to redirect to after authentication
 router.get(
-  // #swagger.tags = ['Authentication']
   "/github/callback",
+  // #swagger.tags = ['Authentication']
+  // #swagger.description = 'GitHub authentication callback'
   passport.authenticate("github", {
     failureRedirect: "/auth/login",
     successRedirect: "/api-docs"
@@ -17,8 +22,10 @@ router.get(
 );
 
 // Logout route
-router.get("/logout", async (req, res) => {
+router.get("/logout", 
   // #swagger.tags = ['Authentication']
+  // #swagger.description = 'Log out current user'
+  async (req, res) => {
   try {
     req.logout(() => {
       req.session.destroy(() => {
@@ -41,6 +48,5 @@ router.get("/logout", async (req, res) => {
       });
     }
   });
-
    
 module.exports = router;

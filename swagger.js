@@ -1,4 +1,11 @@
+// swagger.js
 const swaggerAutogen = require('swagger-autogen')();
+const url = require('url');
+
+// Parse BASE_URL to extract host without protocol
+const baseUrl = process.env.BASE_URL 
+  ? new URL(process.env.BASE_URL).host 
+  : 'real-estate-hub-cmhc.onrender.com';
 
 const doc = {
   info: {
@@ -6,15 +13,28 @@ const doc = {
     description: 'API documentation for Real Estate Hub application',
     version: '1.0.0',
   },
-  host: process.env.BASE_URL || 'real-estate-hub-cmhc.onrender.com',
+  host: baseUrl,
   schemes: ['https'],
   tags: [
     { name: 'Properties', description: 'Property management endpoints' },
     { name: 'Agents', description: 'Agent management endpoints' },
     { name: 'Clients', description: 'Client management endpoints' },
-    { name: 'Users', description: 'User authentication endpoints' },
     { name: 'Authentication', description: 'Authentication endpoints' }
   ],
+  securityDefinitions: {
+    OAuth2: {
+      type: 'oauth2',
+      flow: 'accessCode',
+      authorizationUrl: 'https://github.com/login/oauth/authorize',
+      tokenUrl: 'https://github.com/login/oauth/access_token',
+      scopes: {
+        'read:user': 'Read user profile'
+      }
+    }
+  },
+  security: [{
+    OAuth2: []
+  }],
   definitions: {
     Property: {
       title: 'Modern Downtown Apartment',
@@ -24,17 +44,13 @@ const doc = {
       price: 2500,
       bedrooms: 2,
       bathrooms: 2,
-      status: 'available',
-      features: ['parking', 'gym', 'pool'],
-      images: ['image1.jpg', 'image2.jpg'],
-      createdAt: '2025-06-09T07:00:21.543Z'
+      status: 'available'
     },
     Agent: {
       name: 'Aisha Brown',
       email: 'abrown@engineering.ae',
       phone: '555-876-5432',
-      licenseNumber: 'ENG11223344556',
-      __v: 0
+      licenseNumber: 'ENG11223344556'
     },
     Client: {
       name: 'Jane Doe',
