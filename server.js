@@ -1,11 +1,16 @@
 // server.js
 require("dotenv").config();
-const cors = require('cors');
-const connectDB = require("./config/db");
 const express = require("express");
+const session = require('express-session');
+const cors = require('cors');
+const MongoStore = require('connect-mongo');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
+const passport = require('./config/passport');
+const connectDB = require("./config/db");
+
 const PORT = process.env.PORT || 3000;
+
 
 // Initialize express app
 const app = express();
@@ -13,15 +18,41 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+
 app.use(express.json());
 
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "https://real-estate-hub-cmhc.onrender.com",
+  origin: process.env.CORS_ORIGIN || "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
+
 // Middleware for session management
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'Keyboard Cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000 // 1 day
+  },
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions',
+    ttl: 24 * 60 * 60 // 1 day
+  })
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -31,6 +62,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/agents", require("./routes/agents"));
 app.use("/clients", require("./routes/clients"));
 app.use("/properties", require("./routes/properties"));
+app.use("/users", require("./routes/users"));
 
 // Health check route
 app.get("/", (req, res) => res.send("Welcome to the REAL ESTATE HUB API"));
