@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const Property = require("../models/property");
 const { validateProperty } = require("../middlewares/validate");
+const { ensureAuth } = require("../middlewares/auth");
 
 // CREATE a new property with duplicate check
 router.post("/", 
@@ -16,6 +17,7 @@ router.post("/",
     schema: { $ref: '#/definitions/Property' }
   } */
   validateProperty, 
+  ensureAuth,
   async (req, res, next) => {
   try {
     const { title } = req.body;
@@ -85,6 +87,7 @@ router.put("/:id",
     schema: { $ref: '#/definitions/Property' }
   } */
   validateProperty, 
+  ensureAuth,
   async (req, res, next) => {
   try {
     // Check if property with new title already exists
@@ -133,6 +136,7 @@ router.delete("/:id",
   // #swagger.description = 'Delete property by ID'
   // #swagger.security = [{ "OAuth2": [] }]
   // #swagger.parameters['id'] = { description: 'Property ID' }
+  ensureAuth,
   async (req, res, next) => {
   try {
     const deletedProperty = await Property.findByIdAndDelete(req.params.id);
