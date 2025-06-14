@@ -21,10 +21,6 @@
       "description": "Client management endpoints"
     },
     {
-      "name": "Users",
-      "description": "User authentication endpoints"
-    },
-    {
       "name": "Authentication",
       "description": "Authentication endpoints"
     }
@@ -32,39 +28,67 @@
   "schemes": [
     "https"
   ],
+  "securityDefinitions": {
+    "OAuth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "tokenUrl": "https://github.com/login/oauth/access_token",
+      "scopes": {
+        "read:user": "Read user profile"
+      }
+    }
+  },
   "paths": {
-    "/login": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/github/callback": {
+    "/auth/login": {
       "get": {
         "tags": [
           "Authentication"
         ],
-        "description": "",
+        "description": "Initiate GitHub authentication",
         "responses": {
-          "default": {
-            "description": ""
+          "302": {
+            "description": "Redirect to GitHub authentication"
           }
         }
       }
     },
-    "/logout": {
+    "/auth/github/callback": {
       "get": {
         "tags": [
           "Authentication"
         ],
-        "description": "",
+        "description": "GitHub authentication callback",
+        "responses": {
+          "302": {
+            "description": "Redirect to Swagger UI after authentication"
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Log out current user",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal Server Error"
@@ -72,7 +96,405 @@
         }
       }
     },
-    "/": {
+    "/agents": {
+      "post": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Create a new agent",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agent information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Agent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict - Duplicate email"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Get all agents",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Agent"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/agents/{id}": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Get agent by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Update an agent by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agent information to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Agent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Delete an agent by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      }
+    },
+    "/clients": {
+      "post": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Create a new client",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Client information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Client"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict - Duplicate email"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Get all clients",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Client"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/clients/{id}": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Get client by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Client ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Update a client by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Client ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Client information to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Client"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Delete a client by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Client ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      }
+    },
+    "/properties": {
       "post": {
         "tags": [
           "Properties"
@@ -91,21 +513,49 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Property"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict - Duplicate title"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
       },
       "get": {
         "tags": [
           "Properties"
         ],
-        "description": "",
+        "description": "Get all properties",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Property"
+              }
+            }
           },
           "500": {
             "description": "Internal Server Error"
@@ -113,23 +563,27 @@
         }
       }
     },
-    "/{id}": {
+    "/properties/{id}": {
       "get": {
         "tags": [
           "Properties"
         ],
-        "description": "",
+        "description": "Get property by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Property ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Property"
+            }
           },
           "404": {
             "description": "Not Found"
@@ -149,7 +603,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Property ID"
           },
           {
             "name": "body",
@@ -163,7 +618,21 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Property"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -174,24 +643,41 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Properties"
         ],
-        "description": "",
+        "description": "Delete a property by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Property ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -199,13 +685,19 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
       }
     }
   },
   "definitions": {
     "Property": {
       "type": "object",
+      "required": ["title", "description", "type", "address", "price", "bedrooms", "bathrooms", "status"],
       "properties": {
         "title": {
           "type": "string",
@@ -217,6 +709,7 @@
         },
         "type": {
           "type": "string",
+          "enum": ["rent", "sale"],
           "example": "rent"
         },
         "address": {
@@ -237,37 +730,14 @@
         },
         "status": {
           "type": "string",
+          "enum": ["available", "sold", "rented"],
           "example": "available"
-        },
-        "features": {
-          "type": "array",
-          "example": [
-            "parking",
-            "gym",
-            "pool"
-          ],
-          "items": {
-            "type": "string"
-          }
-        },
-        "images": {
-          "type": "array",
-          "example": [
-            "image1.jpg",
-            "image2.jpg"
-          ],
-          "items": {
-            "type": "string"
-          }
-        },
-        "createdAt": {
-          "type": "string",
-          "example": "2025-06-09T07:00:21.543Z"
         }
       }
     },
     "Agent": {
       "type": "object",
+      "required": ["name", "email", "phone", "licenseNumber"],
       "properties": {
         "name": {
           "type": "string",
@@ -275,6 +745,7 @@
         },
         "email": {
           "type": "string",
+          "format": "email",
           "example": "abrown@engineering.ae"
         },
         "phone": {
@@ -284,15 +755,12 @@
         "licenseNumber": {
           "type": "string",
           "example": "ENG11223344556"
-        },
-        "__v": {
-          "type": "number",
-          "example": 0
         }
       }
     },
     "Client": {
       "type": "object",
+      "required": ["name", "email", "phone"],
       "properties": {
         "name": {
           "type": "string",
@@ -300,6 +768,7 @@
         },
         "email": {
           "type": "string",
+          "format": "email",
           "example": "jane@example.com"
         },
         "phone": {
@@ -310,6 +779,7 @@
     },
     "User": {
       "type": "object",
+      "required": ["githubId", "username", "email", "profilePicture"],
       "properties": {
         "githubId": {
           "type": "string",
@@ -321,6 +791,7 @@
         },
         "email": {
           "type": "string",
+          "format": "email",
           "example": "john@example.com"
         },
         "profilePicture": {
@@ -329,5 +800,10 @@
         }
       }
     }
-  }
+  },
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ]
 }

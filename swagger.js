@@ -4,7 +4,7 @@ const url = require('url');
 
 // Parse BASE_URL to extract host without protocol
 const baseUrl = process.env.BASE_URL 
-  ? new URL(process.env.BASE_URL).host 
+  ? new URL(process.env.BASE_URL).hostname 
   : 'real-estate-hub-cmhc.onrender.com';
 
 const doc = {
@@ -14,6 +14,7 @@ const doc = {
     version: '1.0.0',
   },
   host: baseUrl,
+  basePath: '/',
   schemes: ['https'],
   tags: [
     { name: 'Properties', description: 'Property management endpoints' },
@@ -32,36 +33,111 @@ const doc = {
       }
     }
   },
-  security: [{
-    OAuth2: []
-  }],
   definitions: {
     Property: {
-      title: 'Modern Downtown Apartment',
-      description: 'Luxury apartment with city views',
-      type: 'rent',
-      address: '123 Main St, City, State',
-      price: 2500,
-      bedrooms: 2,
-      bathrooms: 2,
-      status: 'available'
+      type: 'object',
+      required: ["title", "description", "type", "address", "price", "bedrooms", "bathrooms", "status"],
+      properties: {
+        title: { 
+          type: 'string',
+          example: 'Modern Downtown Apartment' 
+        },
+        description: { 
+          type: 'string',
+          example: 'Luxury apartment with city views' 
+        },
+        type: { 
+          type: 'string',
+          enum: ['rent', 'sale'],
+          example: 'rent' 
+        },
+        address: { 
+          type: 'string',
+          example: '123 Main St, City, State' 
+        },
+        price: { 
+          type: 'number',
+          example: 2500 
+        },
+        bedrooms: { 
+          type: 'number',
+          example: 2 
+        },
+        bathrooms: { 
+          type: 'number',
+          example: 2 
+        },
+        status: { 
+          type: 'string',
+          enum: ['available', 'sold', 'rented'],
+          example: 'available' 
+        }
+      }
     },
     Agent: {
-      name: 'Aisha Brown',
-      email: 'abrown@engineering.ae',
-      phone: '555-876-5432',
-      licenseNumber: 'ENG11223344556'
+      type: 'object',
+      required: ["name", "email", "phone", "licenseNumber"],
+      properties: {
+        name: { 
+          type: 'string',
+          example: 'Aisha Brown' 
+        },
+        email: { 
+          type: 'string',
+          format: 'email',
+          example: 'abrown@engineering.ae' 
+        },
+        phone: { 
+          type: 'string',
+          example: '555-876-5432' 
+        },
+        licenseNumber: { 
+          type: 'string',
+          example: 'ENG11223344556' 
+        }
+      }
     },
     Client: {
-      name: 'Jane Doe',
-      email: 'jane@example.com',
-      phone: '555-987-6543'
+      type: 'object',
+      required: ["name", "email", "phone"],
+      properties: {
+        name: { 
+          type: 'string',
+          example: 'Jane Doe' 
+        },
+        email: { 
+          type: 'string',
+          format: 'email',
+          example: 'jane@example.com' 
+        },
+        phone: { 
+          type: 'string',
+          example: '555-987-6543' 
+        }
+      }
     },
     User: {
-      githubId: '12345',
-      username: 'johndoe',
-      email: 'john@example.com',
-      profilePicture: 'https://example.com/pic.jpg'
+      type: 'object',
+      required: ["githubId", "username", "email", "profilePicture"],
+      properties: {
+        githubId: { 
+          type: 'string',
+          example: '12345' 
+        },
+        username: { 
+          type: 'string',
+          example: 'johndoe' 
+        },
+        email: { 
+          type: 'string',
+          format: 'email',
+          example: 'john@example.com' 
+        },
+        profilePicture: { 
+          type: 'string',
+          example: 'https://example.com/pic.jpg' 
+        }
+      }
     }
   }
 };
