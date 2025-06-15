@@ -17,10 +17,12 @@ const doc = {
   basePath: "/",
   schemes: ["https"],
   tags: [
+    { name: "Authentication", description: "Authentication endpoints" },
     { name: "Properties", description: "Property management endpoints" },
     { name: "Agents", description: "Agent management endpoints" },
     { name: "Clients", description: "Client management endpoints" },
-    { name: "Users", description: "User management endpoints" }
+    { name: "Users", description: "User management endpoints" },
+    { name: "Appointments", description: "Appointment management endpoints" }
   ],
   securityDefinitions: {
     OAuth2: {
@@ -148,16 +150,51 @@ const doc = {
           example: "https://example.com/pic.jpg"
         }
       }
+    },
+    Appointment: {
+      type: "object",
+      required: ["propertyId", "agentId", "clientId", "date", "startTime", "endTime"],
+      properties: {
+        propertyId: {
+          type: "string",
+          example: "60d21b4667d0d8992e610c85"
+        },
+        agentId: {
+          type: "string",
+          example: "60d21b4667d0d8992e610c86"
+        },
+        clientId: {
+          type: "string",
+          example: "60d21b4667d0d8992e610c87"
+        },
+        date: {
+          type: "string",
+          format: "date",
+          example: "2023-06-15"
+        },
+        startTime: {
+          type: "string",
+          example: "14:00"
+        },
+        endTime: {
+          type: "string",
+          example: "15:00"
+        },
+        status: {
+          type: "string",
+          enum: ["scheduled", "completed", "cancelled"],
+          example: "scheduled"
+        },
+        notes: {
+          type: "string",
+          example: "Client is interested in purchasing the property"
+        }
+      }
     }
   }
 };
 
 const outputFile = "./swagger-output.json";
-const endpointsFiles = [
-  "./routes/users.js",
-  "./routes/agents.js",
-  "./routes/clients.js",
-  "./routes/properties.js"
-];
+const endpointsFiles = ["./server.js"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
