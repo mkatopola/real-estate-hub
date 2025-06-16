@@ -20,6 +20,7 @@ const checkOwnership = (req, res, next) => {
 router.get(
   "/",
   // #swagger.tags = ['Users']
+  // #swagger.security = [{ "OAuth2": [] }]
   // #swagger.description = 'Get all users (authenticated users only)'
   ensureAuth,
   async (req, res) => {
@@ -36,6 +37,7 @@ router.get(
 router.get(
   "/:id",
   // #swagger.tags = ['Users']
+  // #swagger.security = [{ "OAuth2": [] }]
   // #swagger.description = 'Get user by ID (authenticated users only)'
   // #swagger.parameters['id'] = { description: 'User ID' }
   ensureAuth,
@@ -53,7 +55,8 @@ router.get(
 // UPDATE user by ID (only owner can update)
 router.put(
   "/:id",
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['Users'] 
+  // #swagger.security = [{ "OAuth2": [] }]
   // #swagger.description = 'Update user by ID (only owner can update)'
   // #swagger.parameters['id'] = { description: 'User ID' }
   /* #swagger.parameters['body'] = {
@@ -123,6 +126,7 @@ router.put(
 router.delete(
   "/:id",
   // #swagger.tags = ['Users']
+  // #swagger.security = [{ "OAuth2": [] }]
   // #swagger.description = 'Delete user by ID (only owner can delete)'
   // #swagger.parameters['id'] = { description: 'User ID' }
   ensureAuth,
