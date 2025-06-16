@@ -9,6 +9,10 @@
   "basePath": "/",
   "tags": [
     {
+      "name": "Authentication",
+      "description": "Authentication endpoints"
+    },
+    {
       "name": "Properties",
       "description": "Property management endpoints"
     },
@@ -23,6 +27,10 @@
     {
       "name": "Users",
       "description": "User management endpoints"
+    },
+    {
+      "name": "Appointments",
+      "description": "Appointment management endpoints"
     }
   ],
   "schemes": [
@@ -36,18 +44,394 @@
       "authorizationUrl": "https://github.com/login/oauth/authorize",
       "tokenUrl": "https://github.com/login/oauth/access_token",
       "scopes": {
-        "read:user": "Read user profiles",
-        "write:user": "Modify own user profile",
-        "write:property": "Modify properties",
-        "write:agent": "Modify agents",
-        "write:client": "Modify clients"
+        "read:user": "Read user profile",
+        "write:user": "Write user profile"
       }
     }
   },
   "paths": {
-    "/properties": {
+    "/api-docs.json": {
+      "get": {
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Initiate GitHub authentication",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/github/callback": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "GitHub authentication callback",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Log out current user",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/agents/": {
       "post": {
-        "tags": ["Properties"],
+        "tags": [
+          "Agents"
+        ],
+        "description": "Create a new agent",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agent information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Get all agents",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/agents/{id}": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Get agent by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Update an agent by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agent information to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Agents"
+        ],
+        "description": "Delete agent by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      }
+    },
+    "/clients/": {
+      "post": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Create a new client",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Client information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Get all clients",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/clients/{id}": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Get client by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Client ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Update a client by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Client information to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Clients"
+        ],
+        "description": "Delete client by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Client ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      }
+    },
+    "/properties/": {
+      "post": {
+        "tags": [
+          "Properties"
+        ],
         "description": "Create a new property",
         "parameters": [
           {
@@ -62,43 +446,29 @@
         ],
         "responses": {
           "201": {
-            "description": "Created",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/Property" }
-              }
-            }
+            "description": "Created"
           },
           "400": {
-            "description": "Bad Request - Validation error"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "Unauthorized - Authentication required"
-          },
-          "409": {
-            "description": "Conflict - Duplicate title"
-          },
-          "500": {
-            "description": "Internal Server Error"
+            "description": "Unauthorized"
           }
         },
         "security": [
-          { "OAuth2": ["write:property"] }
+          {
+            "OAuth2": []
+          }
         ]
       },
       "get": {
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "description": "Get all properties",
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/Property" }
-            }
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"
@@ -108,7 +478,9 @@
     },
     "/properties/{id}": {
       "get": {
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "description": "Get property by ID",
         "parameters": [
           {
@@ -121,11 +493,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": { "$ref": "#/definitions/Property" }
+            "description": "OK"
           },
           "404": {
-            "description": "Not Found - Property not found"
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -133,58 +504,54 @@
         }
       },
       "put": {
-        "tags": ["Properties"],
-        "description": "Update property by ID",
+        "tags": [
+          "Properties"
+        ],
+        "description": "Update a property by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "description": "Property ID"
+            "type": "string"
           },
           {
             "name": "body",
             "in": "body",
             "description": "Property information to update",
             "required": true,
-            "schema": { "$ref": "#/definitions/Property" }
+            "schema": {
+              "$ref": "#/definitions/Property"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/Property" }
-              }
-            }
+            "description": "OK"
           },
-          "400": { 
-            "description": "Bad Request - Validation error" 
+          "400": {
+            "description": "Bad Request"
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "404": { 
-            "description": "Not Found - Property not found" 
+          "404": {
+            "description": "Not Found"
           },
-          "409": { 
-            "description": "Conflict - Duplicate field value" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
-          { "OAuth2": ["write:property"] }
+          {
+            "OAuth2": []
+          }
         ]
       },
       "delete": {
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "description": "Delete property by ID",
         "parameters": [
           {
@@ -197,57 +564,54 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" }
-              }
-            }
-          },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
-          },
-          "404": { 
-            "description": "Not Found - Property not found" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
-          }
-        },
-        "security": [
-          { "OAuth2": ["write:property"] }
-        ]
-      }
-    },
-    "/users": {
-      "get": {
-        "tags": ["Users"],
-        "description": "Get all users (authenticated users only)",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/User" }
-            }
+            "description": "OK"
           },
           "401": {
-            "description": "Unauthorized - Authentication required"
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
           }
         },
         "security": [
-          { "OAuth2": ["read:user"] }
+          {
+            "OAuth2": []
+          }
+        ]
+      }
+    },
+    "/users/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get all users (authenticated users only)",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
         ]
       }
     },
     "/users/{id}": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "description": "Get user by ID (authenticated users only)",
         "parameters": [
           {
@@ -260,25 +624,28 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": { "$ref": "#/definitions/User" }
+            "description": "OK"
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "404": { 
-            "description": "Not Found - User not found" 
+          "404": {
+            "description": "Not Found"
           },
-          "500": { 
-            "description": "Internal Server Error" 
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
-          { "OAuth2": ["read:user"] }
+          {
+            "OAuth2": []
+          }
         ]
       },
       "put": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "description": "Update user by ID (only owner can update)",
         "parameters": [
           {
@@ -293,46 +660,44 @@
             "in": "body",
             "description": "User information to update",
             "required": true,
-            "schema": { "$ref": "#/definitions/User" }
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/User" }
-              }
-            }
+            "description": "OK"
           },
-          "400": { 
-            "description": "Bad Request - Validation error" 
+          "400": {
+            "description": "Bad Request"
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "403": { 
-            "description": "Forbidden - Cannot modify other users" 
+          "403": {
+            "description": "Forbidden"
           },
-          "404": { 
-            "description": "Not Found - User not found" 
+          "404": {
+            "description": "Not Found"
           },
-          "409": { 
-            "description": "Conflict - Duplicate field value" 
+          "409": {
+            "description": "Conflict"
           },
-          "500": { 
-            "description": "Internal Server Error" 
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
-          { "OAuth2": ["write:user"] }
+          {
+            "OAuth2": []
+          }
         ]
       },
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "description": "Delete user by ID (only owner can delete)",
         "parameters": [
           {
@@ -345,378 +710,367 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" }
-              }
-            }
+            "description": "OK"
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "403": { 
-            "description": "Forbidden - Cannot delete other users" 
+          "403": {
+            "description": "Forbidden"
           },
-          "404": { 
-            "description": "Not Found - User not found" 
+          "404": {
+            "description": "Not Found"
           },
-          "500": { 
-            "description": "Internal Server Error" 
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
-          { "OAuth2": ["write:user"] }
+          {
+            "OAuth2": []
+          }
         ]
       }
     },
-    "/agents": {
+    "/appointments/": {
       "post": {
-        "tags": ["Agents"],
-        "description": "Create a new agent",
+        "tags": [
+          "Appointments"
+        ],
+        "description": "Create a new appointment",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Agent information",
+            "description": "Appointment information",
             "required": true,
-            "schema": { "$ref": "#/definitions/Agent" }
+            "schema": {
+              "$ref": "#/definitions/Appointment"
+            }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Appointment created successfully",
             "schema": {
               "type": "object",
               "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/Agent" }
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Appointment created successfully"
+                },
+                "data": {
+                  "$ref": "#/definitions/Appointment"
+                }
+              },
+              "xml": {
+                "name": "main"
               }
             }
           },
-          "400": { 
-            "description": "Bad Request - Validation error" 
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Error message"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
-          },
-          "409": { 
-            "description": "Conflict - Duplicate email" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "security": [
-          { "OAuth2": ["write:agent"] }
+          {
+            "OAuth2": []
+          }
         ]
       },
       "get": {
-        "tags": ["Agents"],
-        "description": "Get all agents",
+        "tags": [
+          "Appointments"
+        ],
+        "description": "Get all appointments",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "List of all appointments",
             "schema": {
               "type": "array",
-              "items": { "$ref": "#/definitions/Agent" }
+              "items": {
+                "$ref": "#/definitions/Appointment"
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           },
-          "500": { 
-            "description": "Internal Server Error" 
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Error message"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
       }
     },
-    "/agents/{id}": {
+    "/appointments/{id}": {
       "get": {
-        "tags": ["Agents"],
-        "description": "Get agent by ID",
+        "tags": [
+          "Appointments"
+        ],
+        "description": "Get appointment by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Agent ID"
+            "description": "Appointment ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": { "$ref": "#/definitions/Agent" }
+            "description": "Appointment found",
+            "schema": {
+              "$ref": "#/definitions/Appointment"
+            }
           },
-          "404": { 
-            "description": "Not Found - Agent not found" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "500": { 
-            "description": "Internal Server Error" 
+          "404": {
+            "description": "Appointment not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Appointment not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Error message"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
       },
       "put": {
-        "tags": ["Agents"],
-        "description": "Update agent by ID",
+        "tags": [
+          "Appointments"
+        ],
+        "description": "Update an appointment by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "description": "Agent ID"
+            "type": "string"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Agent information to update",
+            "description": "Appointment information to update",
             "required": true,
-            "schema": { "$ref": "#/definitions/Agent" }
+            "schema": {
+              "$ref": "#/definitions/Appointment"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Appointment updated successfully",
             "schema": {
               "type": "object",
               "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/Agent" }
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Appointment updated successfully"
+                },
+                "data": {
+                  "$ref": "#/definitions/Appointment"
+                }
+              },
+              "xml": {
+                "name": "main"
               }
             }
           },
-          "400": { 
-            "description": "Bad Request - Validation error" 
+          "400": {
+            "description": "Bad Request"
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "404": { 
-            "description": "Not Found - Agent not found" 
+          "404": {
+            "description": "Appointment not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Appointment not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
-          "409": { 
-            "description": "Conflict - Duplicate email" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Error message"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         },
         "security": [
-          { "OAuth2": ["write:agent"] }
+          {
+            "OAuth2": []
+          }
         ]
       },
       "delete": {
-        "tags": ["Agents"],
-        "description": "Delete agent by ID",
+        "tags": [
+          "Appointments"
+        ],
+        "description": "Delete appointment by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Agent ID"
+            "description": "Appointment ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Appointment deleted successfully",
             "schema": {
               "type": "object",
               "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" }
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Appointment deleted successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
               }
             }
           },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
+          "401": {
+            "description": "Unauthorized"
           },
-          "404": { 
-            "description": "Not Found - Agent not found" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
-          }
-        },
-        "security": [
-          { "OAuth2": ["write:agent"] }
-        ]
-      }
-    },
-    "/clients": {
-      "post": {
-        "tags": ["Clients"],
-        "description": "Create a new client",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Client information",
-            "required": true,
-            "schema": { "$ref": "#/definitions/Client" }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
+          "404": {
+            "description": "Appointment not found",
             "schema": {
               "type": "object",
               "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/Client" }
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Appointment not found"
+                }
+              },
+              "xml": {
+                "name": "main"
               }
             }
           },
-          "400": { 
-            "description": "Bad Request - Validation error" 
-          },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
-          },
-          "409": { 
-            "description": "Conflict - Duplicate email" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
-          }
-        },
-        "security": [
-          { "OAuth2": ["write:client"] }
-        ]
-      },
-      "get": {
-        "tags": ["Clients"],
-        "description": "Get all clients",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/Client" }
-            }
-          },
-          "500": { 
-            "description": "Internal Server Error" 
-          }
-        }
-      }
-    },
-    "/clients/{id}": {
-      "get": {
-        "tags": ["Clients"],
-        "description": "Get client by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Client ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": { "$ref": "#/definitions/Client" }
-          },
-          "404": { 
-            "description": "Not Found - Client not found" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
-          }
-        }
-      },
-      "put": {
-        "tags": ["Clients"],
-        "description": "Update client by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Client ID"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Client information to update",
-            "required": true,
-            "schema": { "$ref": "#/definitions/Client" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
+          "500": {
+            "description": "Internal Server Error",
             "schema": {
               "type": "object",
               "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" },
-                "data": { "$ref": "#/definitions/Client" }
+                "error": {
+                  "type": "string",
+                  "example": "Error message"
+                }
+              },
+              "xml": {
+                "name": "main"
               }
             }
-          },
-          "400": { 
-            "description": "Bad Request - Validation error" 
-          },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
-          },
-          "404": { 
-            "description": "Not Found - Client not found" 
-          },
-          "409": { 
-            "description": "Conflict - Duplicate email" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
           }
         },
         "security": [
-          { "OAuth2": ["write:client"] }
-        ]
-      },
-      "delete": {
-        "tags": ["Clients"],
-        "description": "Delete client by ID",
-        "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Client ID"
+            "OAuth2": []
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": { "type": "boolean" },
-                "message": { "type": "string" }
-              }
-            }
-          },
-          "401": { 
-            "description": "Unauthorized - Authentication required" 
-          },
-          "404": { 
-            "description": "Not Found - Client not found" 
-          },
-          "500": { 
-            "description": "Internal Server Error" 
-          }
-        },
-        "security": [
-          { "OAuth2": ["write:client"] }
         ]
       }
     }
@@ -724,45 +1078,135 @@
   "definitions": {
     "Property": {
       "type": "object",
-      "required": ["title", "description", "type", "address", "price", "bedrooms", "bathrooms", "status"],
       "properties": {
-        "title": { "type": "string", "example": "Modern Downtown Apartment" },
-        "description": { "type": "string", "example": "Luxury apartment with city views" },
-        "type": { "type": "string", "enum": ["rent", "sale"], "example": "rent" },
-        "address": { "type": "string", "example": "123 Main St, City, State" },
-        "price": { "type": "number", "example": 2500 },
-        "bedrooms": { "type": "number", "example": 2 },
-        "bathrooms": { "type": "number", "example": 2 },
-        "status": { "type": "string", "enum": ["available", "sold", "rented"], "example": "available" }
+        "title": {
+          "type": "string",
+          "example": "Modern Downtown Apartment"
+        },
+        "description": {
+          "type": "string",
+          "example": "Luxury apartment with city views"
+        },
+        "type": {
+          "type": "string",
+          "example": "rent"
+        },
+        "address": {
+          "type": "string",
+          "example": "123 Main St, City, State"
+        },
+        "price": {
+          "type": "number",
+          "example": 2500
+        },
+        "bedrooms": {
+          "type": "number",
+          "example": 2
+        },
+        "bathrooms": {
+          "type": "number",
+          "example": 2
+        },
+        "status": {
+          "type": "string",
+          "example": "available"
+        }
       }
     },
     "Agent": {
       "type": "object",
-      "required": ["name", "email", "phone", "licenseNumber"],
       "properties": {
-        "name": { "type": "string", "example": "Aisha Brown" },
-        "email": { "type": "string", "format": "email", "example": "abrown@engineering.ae" },
-        "phone": { "type": "string", "example": "555-876-5432" },
-        "licenseNumber": { "type": "string", "example": "ENG11223344556" }
+        "name": {
+          "type": "string",
+          "example": "Aisha Brown"
+        },
+        "email": {
+          "type": "string",
+          "example": "abrown@engineering.ae"
+        },
+        "phone": {
+          "type": "string",
+          "example": "555-876-5432"
+        },
+        "licenseNumber": {
+          "type": "string",
+          "example": "ENG11223344556"
+        }
       }
     },
     "Client": {
       "type": "object",
-      "required": ["name", "email", "phone"],
       "properties": {
-        "name": { "type": "string", "example": "Jane Doe" },
-        "email": { "type": "string", "format": "email", "example": "jane@example.com" },
-        "phone": { "type": "string", "example": "555-987-6543" }
+        "name": {
+          "type": "string",
+          "example": "Jane Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "555-987-6543"
+        }
       }
     },
     "User": {
       "type": "object",
-      "required": ["githubId", "username", "email", "profilePicture"],
       "properties": {
-        "githubId": { "type": "string", "example": "12345" },
-        "username": { "type": "string", "example": "johndoe" },
-        "email": { "type": "string", "format": "email", "example": "john@example.com" },
-        "profilePicture": { "type": "string", "example": "https://example.com/pic.jpg" }
+        "githubId": {
+          "type": "string",
+          "example": "12345"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe"
+        },
+        "email": {
+          "type": "string",
+          "example": "john@example.com"
+        },
+        "profilePicture": {
+          "type": "string",
+          "example": "https://example.com/pic.jpg"
+        }
+      }
+    },
+    "Appointment": {
+      "type": "object",
+      "properties": {
+        "property_id": {
+          "type": "string",
+          "example": "60d21b4667d0d8992e610c85"
+        },
+        "agent_id": {
+          "type": "string",
+          "example": "60d21b4667d0d8992e610c86"
+        },
+        "client_id": {
+          "type": "string",
+          "example": "60d21b4667d0d8992e610c87"
+        },
+        "appointment_date": {
+          "type": "string",
+          "example": "2025-06-25"
+        },
+        "start_time": {
+          "type": "string",
+          "example": "14:00"
+        },
+        "end_time": {
+          "type": "string",
+          "example": "15:00"
+        },
+        "status": {
+          "type": "string",
+          "example": "scheduled"
+        },
+        "notes": {
+          "type": "string",
+          "example": "Client is interested in purchasing the property"
+        }
       }
     }
   }

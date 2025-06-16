@@ -5,7 +5,12 @@ const session = require('express-session');
 const cors = require('cors');
 const MongoStore = require('connect-mongo');
 const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./swagger-output.json');
+const fs = require('fs');
+const path = require('path');
+
+// Force reload swagger file to avoid caching issues
+delete require.cache[require.resolve('./swagger-output.json')];
+const swaggerFile = JSON.parse(fs.readFileSync(path.join(__dirname, 'swagger-output.json'), 'utf8'));
 const passport = require('./config/passport');
 const connectDB = require("./config/db");
 
@@ -47,6 +52,10 @@ app.use(session({
   })
 }));
 
+// Mock authentication middleware only during tests
+if (process.env.NODE_ENV === 'test') {
+  app.use(require('./middlewares/mockAuth'));
+}
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -54,8 +63,23 @@ app.use(passport.session());
 
 
 
+// Serve swagger JSON directly
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerFile);
+});
+
 // Swagger documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+const swaggerOptions = {
+  swaggerOptions: {
+    persistAuthorization: true,
+    url: '/api-docs.json'
+  },
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Real Estate Hub API Documentation"
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerOptions));
 
 // Routes
 app.use("/auth", require("./routes/auth"));
@@ -63,6 +87,7 @@ app.use("/agents", require("./routes/agents"));
 app.use("/clients", require("./routes/clients"));
 app.use("/properties", require("./routes/properties"));
 app.use("/users", require("./routes/users"));
+app.use("/appointments", require("./routes/appointments"));
 
 // Health check route
 app.get("/", (req, res) => res.send("Welcome to the REAL ESTATE HUB API"));
