@@ -97,38 +97,38 @@ exports.validateProperty = [
   }
 ];
 exports.validateAppointment = [
-  body("propertyId")
+  body("property_id")
     .notEmpty()
     .withMessage("Property ID is required")
     .isMongoId()
     .withMessage("Property ID must be a valid MongoDB ID"),
-  body("agentId")
+  body("agent_id")
     .notEmpty()
     .withMessage("Agent ID is required")
     .isMongoId()
     .withMessage("Agent ID must be a valid MongoDB ID"),
-  body("clientId")
+  body("client_id")
     .notEmpty()
     .withMessage("Client ID is required")
     .isMongoId()
     .withMessage("Client ID must be a valid MongoDB ID"),
-  body("date")
+  body("appointment_date")
     .notEmpty()
     .withMessage("Date is required")
     .isISO8601()
     .withMessage("Date must be a valid date in ISO 8601 format"),
-  body("startTime")
+  body("start_time")
     .notEmpty()
     .withMessage("Start time is required")
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("Start time must be in HH:MM format"),
-  body("endTime")
+  body("end_time")
     .notEmpty()
     .withMessage("End time is required")
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("End time must be in HH:MM format")
     .custom((value, { req }) => {
-      if (value <= req.body.startTime) {
+      if (value <= req.body.start_time) {
         throw new Error("End time must be after start time");
       }
       return true;

@@ -49,6 +49,19 @@
     }
   },
   "paths": {
+    "/api-docs.json": {
+      "get": {
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "description": "",
@@ -698,6 +711,25 @@
         }
       }
     },
+    "/appointments/test-data": {
+      "get": {
+        "tags": [
+          "Appointments"
+        ],
+        "description": "Get sample IDs for testing appointment creation",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/appointments/": {
       "post": {
         "tags": [
@@ -1045,534 +1077,133 @@
     "Property": {
       "type": "object",
       "properties": {
+        "title": {
+          "type": "string",
+          "example": "Modern Downtown Apartment"
+        },
+        "description": {
+          "type": "string",
+          "example": "Luxury apartment with city views"
+        },
         "type": {
           "type": "string",
-          "example": "object"
+          "example": "rent"
         },
-        "required": {
-          "type": "array",
-          "example": [
-            "title",
-            "description",
-            "type",
-            "address",
-            "price",
-            "bedrooms",
-            "bathrooms",
-            "status"
-          ],
-          "items": {
-            "type": "string"
-          }
+        "address": {
+          "type": "string",
+          "example": "123 Main St, City, State"
         },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "Modern Downtown Apartment"
-                }
-              }
-            },
-            "description": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "Luxury apartment with city views"
-                }
-              }
-            },
-            "type": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "enum": {
-                  "type": "array",
-                  "example": [
-                    "rent",
-                    "sale"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "example": {
-                  "type": "string",
-                  "example": "rent"
-                }
-              }
-            },
-            "address": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "123 Main St, City, State"
-                }
-              }
-            },
-            "price": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "example": {
-                  "type": "number",
-                  "example": 2500
-                }
-              }
-            },
-            "bedrooms": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "example": {
-                  "type": "number",
-                  "example": 2
-                }
-              }
-            },
-            "bathrooms": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "example": {
-                  "type": "number",
-                  "example": 2
-                }
-              }
-            },
-            "status": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "enum": {
-                  "type": "array",
-                  "example": [
-                    "available",
-                    "sold",
-                    "rented"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "example": {
-                  "type": "string",
-                  "example": "available"
-                }
-              }
-            }
-          }
+        "price": {
+          "type": "number",
+          "example": 2500
+        },
+        "bedrooms": {
+          "type": "number",
+          "example": 2
+        },
+        "bathrooms": {
+          "type": "number",
+          "example": 2
+        },
+        "status": {
+          "type": "string",
+          "example": "available"
         }
       }
     },
     "Agent": {
       "type": "object",
       "properties": {
-        "type": {
+        "name": {
           "type": "string",
-          "example": "object"
+          "example": "Aisha Brown"
         },
-        "required": {
-          "type": "array",
-          "example": [
-            "name",
-            "email",
-            "phone",
-            "licenseNumber"
-          ],
-          "items": {
-            "type": "string"
-          }
+        "email": {
+          "type": "string",
+          "example": "abrown@engineering.ae"
         },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "Aisha Brown"
-                }
-              }
-            },
-            "email": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "format": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "abrown@engineering.ae"
-                }
-              }
-            },
-            "phone": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "555-876-5432"
-                }
-              }
-            },
-            "licenseNumber": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "ENG11223344556"
-                }
-              }
-            }
-          }
+        "phone": {
+          "type": "string",
+          "example": "555-876-5432"
+        },
+        "licenseNumber": {
+          "type": "string",
+          "example": "ENG11223344556"
         }
       }
     },
     "Client": {
       "type": "object",
       "properties": {
-        "type": {
+        "name": {
           "type": "string",
-          "example": "object"
+          "example": "Jane Doe"
         },
-        "required": {
-          "type": "array",
-          "example": [
-            "name",
-            "email",
-            "phone"
-          ],
-          "items": {
-            "type": "string"
-          }
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
         },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "Jane Doe"
-                }
-              }
-            },
-            "email": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "format": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "jane@example.com"
-                }
-              }
-            },
-            "phone": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "555-987-6543"
-                }
-              }
-            }
-          }
+        "phone": {
+          "type": "string",
+          "example": "555-987-6543"
         }
       }
     },
     "User": {
       "type": "object",
       "properties": {
-        "type": {
+        "githubId": {
           "type": "string",
-          "example": "object"
+          "example": "12345"
         },
-        "required": {
-          "type": "array",
-          "example": [
-            "githubId",
-            "username",
-            "email",
-            "profilePicture"
-          ],
-          "items": {
-            "type": "string"
-          }
+        "username": {
+          "type": "string",
+          "example": "johndoe"
         },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "githubId": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "12345"
-                }
-              }
-            },
-            "username": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "johndoe"
-                }
-              }
-            },
-            "email": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "format": {
-                  "type": "string",
-                  "example": "email"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "john@example.com"
-                }
-              }
-            },
-            "profilePicture": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "https://example.com/pic.jpg"
-                }
-              }
-            }
-          }
+        "email": {
+          "type": "string",
+          "example": "john@example.com"
+        },
+        "profilePicture": {
+          "type": "string",
+          "example": "https://example.com/pic.jpg"
         }
       }
     },
     "Appointment": {
       "type": "object",
       "properties": {
-        "type": {
+        "property_id": {
           "type": "string",
-          "example": "object"
+          "example": "60d21b4667d0d8992e610c85"
         },
-        "required": {
-          "type": "array",
-          "example": [
-            "propertyId",
-            "agentId",
-            "clientId",
-            "date",
-            "startTime",
-            "endTime"
-          ],
-          "items": {
-            "type": "string"
-          }
+        "agent_id": {
+          "type": "string",
+          "example": "60d21b4667d0d8992e610c86"
         },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "propertyId": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "60d21b4667d0d8992e610c85"
-                }
-              }
-            },
-            "agentId": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "60d21b4667d0d8992e610c86"
-                }
-              }
-            },
-            "clientId": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "60d21b4667d0d8992e610c87"
-                }
-              }
-            },
-            "date": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "format": {
-                  "type": "string",
-                  "example": "date"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "2023-06-15"
-                }
-              }
-            },
-            "startTime": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "14:00"
-                }
-              }
-            },
-            "endTime": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "15:00"
-                }
-              }
-            },
-            "status": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "enum": {
-                  "type": "array",
-                  "example": [
-                    "scheduled",
-                    "completed",
-                    "cancelled"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "example": {
-                  "type": "string",
-                  "example": "scheduled"
-                }
-              }
-            },
-            "notes": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "example": {
-                  "type": "string",
-                  "example": "Client is interested in purchasing the property"
-                }
-              }
-            }
-          }
+        "client_id": {
+          "type": "string",
+          "example": "60d21b4667d0d8992e610c87"
+        },
+        "appointment_date": {
+          "type": "string",
+          "example": "2025-06-25"
+        },
+        "start_time": {
+          "type": "string",
+          "example": "14:00"
+        },
+        "end_time": {
+          "type": "string",
+          "example": "15:00"
+        },
+        "status": {
+          "type": "string",
+          "example": "scheduled"
+        },
+        "notes": {
+          "type": "string",
+          "example": "Client is interested in purchasing the property"
         }
       }
     }

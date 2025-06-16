@@ -38,158 +38,41 @@ const doc = {
   },
   definitions: {
     Property: {
-      type: "object",
-      required: [
-        "title",
-        "description",
-        "type",
-        "address",
-        "price",
-        "bedrooms",
-        "bathrooms",
-        "status"
-      ],
-      properties: {
-        title: {
-          type: "string",
-          example: "Modern Downtown Apartment"
-        },
-        description: {
-          type: "string",
-          example: "Luxury apartment with city views"
-        },
-        type: {
-          type: "string",
-          enum: ["rent", "sale"],
-          example: "rent"
-        },
-        address: {
-          type: "string",
-          example: "123 Main St, City, State"
-        },
-        price: {
-          type: "number",
-          example: 2500
-        },
-        bedrooms: {
-          type: "number",
-          example: 2
-        },
-        bathrooms: {
-          type: "number",
-          example: 2
-        },
-        status: {
-          type: "string",
-          enum: ["available", "sold", "rented"],
-          example: "available"
-        }
-      }
+      title: "Modern Downtown Apartment",
+      description: "Luxury apartment with city views",
+      type: "rent",
+      address: "123 Main St, City, State",
+      price: 2500,
+      bedrooms: 2,
+      bathrooms: 2,
+      status: "available"
     },
     Agent: {
-      type: "object",
-      required: ["name", "email", "phone", "licenseNumber"],
-      properties: {
-        name: {
-          type: "string",
-          example: "Aisha Brown"
-        },
-        email: {
-          type: "string",
-          format: "email",
-          example: "abrown@engineering.ae"
-        },
-        phone: {
-          type: "string",
-          example: "555-876-5432"
-        },
-        licenseNumber: {
-          type: "string",
-          example: "ENG11223344556"
-        }
-      }
+      name: "Aisha Brown",
+      email: "abrown@engineering.ae",
+      phone: "555-876-5432",
+      licenseNumber: "ENG11223344556"
     },
     Client: {
-      type: "object",
-      required: ["name", "email", "phone"],
-      properties: {
-        name: {
-          type: "string",
-          example: "Jane Doe"
-        },
-        email: {
-          type: "string",
-          format: "email",
-          example: "jane@example.com"
-        },
-        phone: {
-          type: "string",
-          example: "555-987-6543"
-        }
-      }
+      name: "Jane Doe",
+      email: "jane@example.com",
+      phone: "555-987-6543"
     },
     User: {
-      type: "object",
-      required: ["githubId", "username", "email", "profilePicture"],
-      properties: {
-        githubId: {
-          type: "string",
-          example: "12345"
-        },
-        username: {
-          type: "string",
-          example: "johndoe"
-        },
-        email: {
-          type: "string",
-          format: "email",
-          example: "john@example.com"
-        },
-        profilePicture: {
-          type: "string",
-          example: "https://example.com/pic.jpg"
-        }
-      }
+      githubId: "12345",
+      username: "johndoe",
+      email: "john@example.com",
+      profilePicture: "https://example.com/pic.jpg"
     },
     Appointment: {
-      type: "object",
-      required: ["propertyId", "agentId", "clientId", "date", "startTime", "endTime"],
-      properties: {
-        propertyId: {
-          type: "string",
-          example: "60d21b4667d0d8992e610c85"
-        },
-        agentId: {
-          type: "string",
-          example: "60d21b4667d0d8992e610c86"
-        },
-        clientId: {
-          type: "string",
-          example: "60d21b4667d0d8992e610c87"
-        },
-        date: {
-          type: "string",
-          format: "date",
-          example: "2023-06-15"
-        },
-        startTime: {
-          type: "string",
-          example: "14:00"
-        },
-        endTime: {
-          type: "string",
-          example: "15:00"
-        },
-        status: {
-          type: "string",
-          enum: ["scheduled", "completed", "cancelled"],
-          example: "scheduled"
-        },
-        notes: {
-          type: "string",
-          example: "Client is interested in purchasing the property"
-        }
-      }
+      property_id: "60d21b4667d0d8992e610c85",
+      agent_id: "60d21b4667d0d8992e610c86",
+      client_id: "60d21b4667d0d8992e610c87",
+      appointment_date: "2025-06-25",
+      start_time: "14:00",
+      end_time: "15:00",
+      status: "scheduled",
+      notes: "Client is interested in purchasing the property"
     }
   }
 };

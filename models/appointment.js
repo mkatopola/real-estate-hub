@@ -3,42 +3,44 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const appointmentSchema = new Schema({
-  propertyId: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'Property', 
-    required: true 
+  property_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Property',
+    required: true
   },
-  agentId: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'Agent', 
-    required: true 
+  agent_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Agent',
+    required: true
   },
-  clientId: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'Client', 
-    required: true 
+  client_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Client',
+    required: true
   },
-  date: { 
-    type: Date, 
-    required: true 
+  appointment_date: {
+    type: Date,
+    required: true
   },
-  startTime: { 
-    type: String, 
-    required: true 
+  start_time: {
+    type: String,
+    required: true
   },
-  endTime: { 
-    type: String, 
-    required: true 
+  end_time: {
+    type: String,
+    required: true
   },
-  status: { 
-    type: String, 
-    enum: ['scheduled', 'completed', 'cancelled'], 
-    default: 'scheduled' 
+  status: {
+    type: String,
+    enum: ['scheduled', 'completed', 'cancelled'],
+    default: 'scheduled'
   },
-  notes: { 
-    type: String 
+  notes: {
+    type: String
   }
-}, { timestamps: true });
+}, {
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+});
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 

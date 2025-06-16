@@ -2,11 +2,14 @@
 const express = require("express");
 const router = express.Router();
 const Appointment = require("../models/appointment");
+const Property = require("../models/property");
+const Agent = require("../models/agent");
+const Client = require("../models/client");
 const { validateAppointment } = require("../middlewares/validate");
 const { ensureAuth } = require("../middlewares/auth");
 
 // CREATE a new appointment
-router.post("/", 
+router.post("/",
   // #swagger.tags = ['Appointments']
   // #swagger.description = 'Create a new appointment'
   // #swagger.security = [{ "OAuth2": [] }]
@@ -16,15 +19,42 @@ router.post("/",
     required: true,
     schema: { $ref: '#/definitions/Appointment' }
   } */
-  validateAppointment, 
+  validateAppointment,
   ensureAuth,
   async (req, res, next) => {
     try {
+      // Validate that referenced documents exist
+      // Check if property exists
+      const property = await Property.findById(req.body.property_id);
+      if (!property) {
+        return res.status(400).json({
+          error: "Property not found with the provided ID"
+        });
+      }
+
+      // Check if agent exists
+      const agent = await Agent.findById(req.body.agent_id);
+      if (!agent) {
+        return res.status(400).json({
+          error: "Agent not found with the provided ID"
+        });
+      }
+
+      // Check if client exists
+      const client = await Client.findById(req.body.client_id);
+      if (!client) {
+        return res.status(400).json({
+          error: "Client not found with the provided ID"
+        });
+      }
+
+      // Create the appointment
       const newAppointment = await Appointment.create(req.body);
+
       /* #swagger.responses[201] = {
         description: 'Appointment created successfully',
-        schema: { 
-          success: true, 
+        schema: {
+          success: true,
           message: 'Appointment created successfully',
           data: { $ref: '#/definitions/Appointment' }
         }
@@ -35,6 +65,20 @@ router.post("/",
         data: newAppointment
       });
     } catch (error) {
+      console.error("Appointment creation error:", error);
+
+      // Handle specific MongoDB validation errors
+      if (error.name === 'ValidationError') {
+        const validationErrors = Object.values(error.errors).map(err => ({
+          field: err.path,
+          message: err.message
+        }));
+        return res.status(400).json({
+          error: "Validation failed",
+          details: validationErrors
+        });
+      }
+
       /* #swagger.responses[400] = {
         description: 'Bad Request',
         schema: { error: 'Error message' }
@@ -54,9 +98,9 @@ router.get("/",
   async (req, res, next) => {
     try {
       const appointments = await Appointment.find()
-        .populate('propertyId')
-        .populate('agentId')
-        .populate('clientId');
+        .populate('property_id')
+        .populate('agent_id')
+        .populate('client_id');
       /* #swagger.responses[200] = {
         description: 'List of all appointments',
         schema: [{ $ref: '#/definitions/Appointment' }]
@@ -83,9 +127,9 @@ router.get("/:id",
   async (req, res, next) => {
     try {
       const appointment = await Appointment.findById(req.params.id)
-        .populate('propertyId')
-        .populate('agentId')
-        .populate('clientId');
+        .populate('property_id')
+        .populate('agent_id')
+        .populate('client_id');
       if (!appointment) {
         /* #swagger.responses[404] = {
           description: 'Appointment not found',
