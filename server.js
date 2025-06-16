@@ -52,6 +52,10 @@ app.use(session({
   })
 }));
 
+// Mock authentication middleware only during tests
+if (process.env.NODE_ENV === 'test') {
+  app.use(require('./middlewares/mockAuth'));
+}
 
 app.use(passport.initialize());
 app.use(passport.session());
