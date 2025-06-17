@@ -23,6 +23,24 @@ router.post("/",
   ensureAuth,
   async (req, res, next) => {
     try {
+      // Check for overlapping appointment
+      const overlapping = await Appointment.findOne({
+        agent_id: req.body.agent_id,
+        appointment_date: req.body.appointment_date,
+        $or: [
+          {
+            start_time: { $lt: req.body.end_time },
+            end_time: { $gt: req.body.start_time }
+          }
+        ]
+      });
+
+      if (overlapping) {
+        return res.status(409).json({
+          error: "Appointment overlaps with another appointment for this agent"
+        });
+      }
+
       // Validate that referenced documents exist
       // Check if property exists
       const property = await Property.findById(req.body.property_id);

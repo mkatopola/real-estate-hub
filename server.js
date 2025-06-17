@@ -88,8 +88,6 @@ app.use("/clients", require("./routes/clients"));
 app.use("/properties", require("./routes/properties"));
 app.use("/users", require("./routes/users"));
 app.use("/appointments", require("./routes/appointments"));
-app.use("/dashboard", require("./routes/dashboard"));
-
 // Health check route
 app.get("/", (req, res) => res.send("Welcome to the REAL ESTATE HUB API"));
 
