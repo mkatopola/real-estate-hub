@@ -34,7 +34,6 @@
     }
   ],
   "schemes": [
-    "http",
     "https"
   ],
   "securityDefinitions": {
